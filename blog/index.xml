@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on Sunbirder</title>
+    <link>https://sunbirder.github.io/blog/</link>
+    <description>Recent content in Blog on Sunbirder</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Sat, 06 Jan 2018 02:15:26 +0800</lastBuildDate>
+    
+	<atom:link href="https://sunbirder.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>第一篇log</title>
+      <link>https://sunbirder.github.io/blog/2019-08/%E7%AC%AC%E4%B8%80%E7%AF%87log/</link>
+      <pubDate>Sat, 17 Aug 2019 08:31:37 +0800</pubDate>
+      
+      <guid>https://sunbirder.github.io/blog/2019-08/%E7%AC%AC%E4%B8%80%E7%AF%87log/</guid>
+      <description>第一篇log</description>
+    </item>
+    
+  </channel>
+</rss>
