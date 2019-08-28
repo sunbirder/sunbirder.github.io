@@ -7,23 +7,23 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="Sunbirder">
-  <meta name="description" content="[Be myself. Love the wonderful world. Do the right things and be a better man.]">
+  <meta name="description" content="深入浅出Nodejs 简介">
   
-  <meta property="og:title" content="生活" />
-<meta property="og:description" content="[Be myself. Love the wonderful world. Do the right things and be a better man.]" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://sunbirder.github.io/categories/%E7%94%9F%E6%B4%BB/" />
-
-<meta property="og:updated_time" content="2019-08-17T08:31:37+08:00" />
+  <meta property="og:title" content="深入浅出Nodejs 1 简介" />
+<meta property="og:description" content="深入浅出Nodejs 简介" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-1-%E7%AE%80%E4%BB%8B/" />
+<meta property="article:published_time" content="2019-08-17T08:31:37+08:00" />
+<meta property="article:modified_time" content="2019-08-17T08:31:37+08:00" />
 
 
   <title>
   
-       生活 | Sunbirder 
+       深入浅出Nodejs 1 简介 | Sunbirder 
   
   </title>
 
-  <link rel="canonical" href="https://sunbirder.github.io/categories/%E7%94%9F%E6%B4%BB/">
+  <link rel="canonical" href="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-1-%E7%AE%80%E4%BB%8B/">
 
   
   
@@ -293,133 +293,452 @@
     
 
     
-<main class="post-main-wrapper px-5">
   
-  <div class="row">
+  <main class="post-main-wrapper">
     
-    <div class="col-md-3">
+    
+    <div class="row">
+
       
+
       
+      <div class="col-md-10">
       
 
-  
-
-
-
-
-
-  <hr>
-  
-    <div class="post-meta">
-      <div class="mb-2">
-        <a href="https://sunbirder.github.io/categories/">
-          <span class="font-weight-bold text-uppercase post-meta">
-            <i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 
-            Categories
-          </span>
-        </a>
-      </div>
-
-      <div class="li-x post-meta" style="margin-left: -8px;">
         
-          
-          
-            
-            <li class="py-1">
-              <a href="https://sunbirder.github.io/categories/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs">
-                <span>深入浅出nodejs (6)</span>
-              </a>
-            </li>           
-          
-            
-              <li class="middot"></li>
-            
-            <li class="py-1">
-              <a href="https://sunbirder.github.io/categories/%E7%94%9F%E6%B4%BB">
-                <span>生活 (1)</span>
-              </a>
-            </li>           
-          
-        
-      </div>
-    </div>
+        <div class="z-depth-1  post-wrapper white-bg single-post">
 
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
     
-  
-
-
       
+        <li><a href="https://sunbirder.github.io/categories/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 深入浅出Nodejs </a></li>
       
+    
+    
+  </ul>
 
-  
+  <div class="px-4 post-heading">深入浅出Nodejs 1 简介</div>
 
-
-
-
-
-
-      
-  
-
-
-
-
-
-
-
-  
-
-    </div>
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Aug 17, 2019</li>
     
 
     
+      <li class="middot"></li>
+      <li>One minute read</li>
     
-    <div class="col-md-9 mt-3">
-      <ul>
-        <div class="div-x">
-            <div class='post-heading'>
+  </ul>
   
-      生活
-  
+
 </div>
 
+
+          <div class="post-content markdown">
             
+
+<p><img src="https://sunbirder.github.io/images/technology/深入浅出Nodejs/nodejs.png" alt="nodejs.png" />
+<img src="https://sunbirder.github.io/images/technology/深入浅出Nodejs/libuv.png" alt="libuv.png" /></p>
+
+<h1 id="1-node-的特点">1. Node 的特点</h1>
+
+<h3 id="异步-i-o">异步 I/O</h3>
+
+<p>node 中绝大多数的操作都是异步方式调用.</p>
+
+<h3 id="事件与回调函数">事件与回调函数</h3>
+
+<p>异步编程详解</p>
+
+<h3 id="单线程">单线程</h3>
+
+<p>单线程弱点:</p>
+
+<p>无法利用多核 CPU; 现在微服务时代, 本身不是问题.</p>
+
+<p>错误会导致整个应用退出; 代码级别增强健壮性, 守护进程.</p>
+
+<p>大量计算占用 CPU 导致无法继续调用异步 I/O; CPU 密集计算方式不适合单线程模型, 需要采用多线程模型(apche,php), Node 也有缓解方案.比如采用 Master-Work(pm2)管理子进程方式, 转换为类多进程模型.</p>
+
+<h3 id="跨平台">跨平台</h3>
+
+<p>Node 基于 libuv 实现跨平台.</p>
+
+<h1 id="2-node-的应用场景">2. Node 的应用场景</h1>
+
+<h3 id="i-o-密集型">I/O 密集型</h3>
+
+<p>主要得益于 Node 利用事件循环的处理能力</p>
+
+<h3 id="不擅长-cpu-密集型业务">不擅长 CPU 密集型业务</h3>
+
+<p>确实不擅长, 但是V8引擎的执行效率已经是比较高的了, 还有其他方式高效的利用CPU;</p>
+
+<p>通过C/C++扩展方式, 弥补V8引擎对应性能差的模块</p>
+
+<p>实现Master-Work进程管理, 充分利用多核CPU</p>
+
+<p>###应用场景</p>
+
+<p>前后端编程语言统一</p>
+
+<p>高性能I/O实时应用: socket.io</p>
+
+<p>并行I/O, 高效利用分布式环境: NodeFox, ql.io</p>
+
+<p>并发I/O, 接口开发</p>
+
+<p>游戏领域, 实时和并发能力: 网易开源pomelo框架</p>
+
+<p>工具应用: 前端/运维/自动化工具</p>
+
+<h2 id="版本控制">版本控制</h2>
+
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Action</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Init</td>
+<td>2019-08-17</td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
             
-              <div class="px-2 middot"></div>
-              <div>
-                One post
-              </div>
+            </div>
             
           </div>
-      
           
-      </ul>
-      <ul>
-        
-            
-        
-        
-            
-                <li class="post-item no-bullet">
-                    <span class="date">2019.8</span>
-                </li>
-                
-                    <li class="post-item">
-    
-    <span class="meta"><time datetime='2019-08-17T08:31:37&#43;08:00'>Aug 17, 2019</time></span>
-    
-    <a href="https://sunbirder.github.io/blog/2019-08/%E7%AC%AC%E4%B8%80%E7%AF%87log/"><span>第一篇log</span></a>
-</li>
 
-                
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-2-%E6%A8%A1%E5%9D%97%E6%9C%BA%E5%88%B6/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>深入浅出Nodejs 2 模块机制</span>
+                  </div>
+                </a>
+              
+            </div>
             
+            <div class="col-md-6 text-right" >
+              
+            </div>
+          </div>
+
+          
+
+        </div>
         
-      </ul>
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#1-node-%e7%9a%84%e7%89%b9%e7%82%b9">
+												 1. Node 的特点
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%bc%82%e6%ad%a5-i-o">
+												 异步 I/O
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%ba%8b%e4%bb%b6%e4%b8%8e%e5%9b%9e%e8%b0%83%e5%87%bd%e6%95%b0">
+												 事件与回调函数
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8d%95%e7%ba%bf%e7%a8%8b">
+												 单线程
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%b7%a8%e5%b9%b3%e5%8f%b0">
+												 跨平台
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#2-node-%e7%9a%84%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af">
+												 2. Node 的应用场景
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#i-o-%e5%af%86%e9%9b%86%e5%9e%8b">
+												 I/O 密集型
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%b8%8d%e6%93%85%e9%95%bf-cpu-%e5%af%86%e9%9b%86%e5%9e%8b%e4%b8%9a%e5%8a%a1">
+												 不擅长 CPU 密集型业务
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%89%88%e6%9c%ac%e6%8e%a7%e5%88%b6">
+												 版本控制
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
     </div>
     
-    
-  </div>
-</main> 
+
+
+  </main>
+  
+
 
     
     

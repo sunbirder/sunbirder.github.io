@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="Sunbirder">
+  <meta name="description" content="深入浅出Nodejs 4 异步编程">
+  
+  <meta property="og:title" content="深入浅出Nodejs 4 异步编程" />
+<meta property="og:description" content="深入浅出Nodejs 4 异步编程" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-4-%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" />
+<meta property="article:published_time" content="2019-08-17T08:31:37+08:00" />
+<meta property="article:modified_time" content="2019-08-17T08:31:37+08:00" />
+
+
+  <title>
+  
+       深入浅出Nodejs 4 异步编程 | Sunbirder 
+  
+  </title>
+
+  <link rel="canonical" href="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-4-%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">
+
+  
+  
+
+  
+  <link href="https://sunbirder.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://sunbirder.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://sunbirder.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://sunbirder.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://sunbirder.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://sunbirder.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://sunbirder.github.io/img/WechatIMG381.jpeg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://sunbirder.github.io/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://sunbirder.github.io/">
+          
+        <img class="avatar" src="https://sunbirder.github.io/img/WechatIMG381.jpeg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> Sunbirder</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://sunbirder.github.io/">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://sunbirder.github.io/technology/" >Technology  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://sunbirder.github.io/blog/" >Blog  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://sunbirder.github.io/about/" >About  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides/fan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides//leaf.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides//raw_1515691746.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides//raw_1515847341.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://sunbirder.github.io/">
+          
+            <img class="pull-right avatar avatar-md" src="https://sunbirder.github.io/img/WechatIMG381.jpeg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://sunbirder.github.io/">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>Sunbirder</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/sunbirder" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+              <a href="//linkedin.com/in/birder-sun-449887191/" target="_blank" rel="noopener"><i class="fab fa-linkedin pr-1" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:1105074497@qq.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://sunbirder.github.io/categories/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 深入浅出Nodejs </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">深入浅出Nodejs 4 异步编程</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Aug 17, 2019</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>2 minutes read</li>
+    
+  </ul>
+  
+
+</div>
+
+
+          <div class="post-content markdown">
+            
+
+<h1 id="1-函数编程">1. 函数编程</h1>
+
+<p>在js中, 函数是一等公民</p>
+
+<h4 id="高阶函数">高阶函数</h4>
+
+<p>把函数作为参数, 或者函数作为返回值</p>
+
+<h4 id="偏函数用法">偏函数用法</h4>
+
+<pre><code class="language-javascript">var toString = Object.prototype.toString;
+var isType = function(type){
+	return = function(obj){
+		return toString.call(obj) == '[object'+ type +']';
+  }
+}
+</code></pre>
+
+<h1 id="2-异步编程优势与难点">2. 异步编程优势与难点</h1>
+
+<h4 id="优势">优势:</h4>
+
+<p>非阻塞I/O模型</p>
+
+<p>在解决CPU密集型请求时, 建议CPU耗时不超过10ms, 或将大量的计算分解为诸多的小计算, 通过setImmediate()进行调度.</p>
+
+<h4 id="难点">难点:</h4>
+
+<p>难点1</p>
+
+<ol>
+<li>异常处理1; 异常处理try/catch的时候只能捕获js同步代码抛出的异常, 在事件循环中抛出的异常不会被捕获;</li>
+</ol>
+
+<p>自行定义异步方法(封装node自带的异步函数), 需要遵循一些原则:</p>
+
+<ol>
+<li>必须之心调用者传入的回调参数</li>
+
+<li><p>正确传递异常传入回调函数</p></li>
+
+<li><p>异常处理2:</p>
+
+<pre><code class="language-javascript">try{
+ req.body = JSON.parse(buf, options.revier);
+ callback();
+}catch(err){
+ err.body = buf;
+ err.status = 400;
+ callback(err);
+}
+当异常抛出的时候, callbak会被执行两次;
+正确处理如下:
+try{
+ req.body = JSON.parse(buf, options.revier);
+}catch(err){
+ err.body = buf;
+ err.status = 400;
+ callback(err);
+}
+callback();
+   
+</code></pre></li>
+</ol>
+
+<p>难点2:</p>
+
+<p>函数嵌套过深(回调地狱)</p>
+
+<p>难点3:</p>
+
+<p>阻塞代码</p>
+
+<p>如果需求需要实现sleep函数(node没有), 自行采用while实现则会占用CPU, 会破坏实现循环.</p>
+
+<p>解决方法可以采用setTimeout()处理.</p>
+
+<p>难点4:</p>
+
+<p>多线程编程</p>
+
+<p>可以使用cluster模块实现</p>
+
+<p>难点5:</p>
+
+<p>异步转同步</p>
+
+<p>建议异步编程</p>
+
+<h1 id="3-异步编程解决方案">3. 异步编程解决方案</h1>
+
+<h3 id="时间发布-订阅模式">时间发布/订阅模式</h3>
+
+<p>事件细节:</p>
+
+<p>​   一个事件添加超过10个侦听器, 将会得到一个警告. Emitter.setMaxListeners(0)可以去掉限制.</p>
+
+<p>​   EventEmitter对象会检查error事件添加的侦听器, 存在错误会交给侦听器, 不存在将抛出异常.</p>
+
+<ol>
+<li><p>继承events</p>
+
+<pre><code class="language-javascript">var events = require('events');
+function Stream(){
+ events.EventEmitter.call(this);
+}
+util.inherits(Stream, events.EventEmitter)
+</code></pre></li>
+</ol>
+
+<p>node中的util模块封装了继承方法, 可以方便的继承EventEmtter类, 利用事件机制解决业务问题.</p>
+
+<ol>
+<li><p>利用事件队列解决雪崩问题</p>
+
+<pre><code class="language-javascript">var status = &quot;ready&quot;;
+var select = function(callback){
+ if(status == &quot;ready&quot;){
+		status = &quot;pending&quot;;
+   db.select(&quot;SQL&quot;, function(results){
+     status = &quot;ready&quot;;
+     callback(results);
+   });
+ }
+}
+   
+</code></pre></li>
+
+<li><p>多异步之间的协作方案</p></li>
+
+<li><p>EventProxy的原理</p></li>
+</ol>
+
+<h3 id="promise-deferred模式">Promise/Deferred模式</h3>
+
+<h3 id="流程控制库">流程控制库</h3>
+
+<p>尾触发与Next</p>
+
+<h2 id="版本控制">版本控制</h2>
+
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Action</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Init</td>
+<td>2019-08-20</td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-5-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>深入浅出Nodejs 5 内存管理</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-3-%E5%BC%82%E6%AD%A5i/o/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>深入浅出Nodejs 3 异步I/O</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#1-%e5%87%bd%e6%95%b0%e7%bc%96%e7%a8%8b">
+												 1. 函数编程
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%ab%98%e9%98%b6%e5%87%bd%e6%95%b0">
+												 高阶函数
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%81%8f%e5%87%bd%e6%95%b0%e7%94%a8%e6%b3%95">
+												 偏函数用法
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#2-%e5%bc%82%e6%ad%a5%e7%bc%96%e7%a8%8b%e4%bc%98%e5%8a%bf%e4%b8%8e%e9%9a%be%e7%82%b9">
+												 2. 异步编程优势与难点
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%bc%98%e5%8a%bf">
+												 优势:
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%9a%be%e7%82%b9">
+												 难点:
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#3-%e5%bc%82%e6%ad%a5%e7%bc%96%e7%a8%8b%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88">
+												 3. 异步编程解决方案
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%97%b6%e9%97%b4%e5%8f%91%e5%b8%83-%e8%ae%a2%e9%98%85%e6%a8%a1%e5%bc%8f">
+												 时间发布/订阅模式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#promise-deferred%e6%a8%a1%e5%bc%8f">
+												 Promise/Deferred模式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%b5%81%e7%a8%8b%e6%8e%a7%e5%88%b6%e5%ba%93">
+												 流程控制库
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%89%88%e6%9c%ac%e6%8e%a7%e5%88%b6">
+												 版本控制
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+    <a href="//github.com/sunbirder " target="_blank" rel="noopener"
+      ><i class="fab fa-github mr-3" aria-hidden="true"></i
+    ></a>
+    
+    
+    <a href="//linkedin.com/in/birder-sun-449887191/" target="_blank" rel="noopener"
+      ><i class="fab fa-linkedin-in mr-3" aria-hidden="true"></i
+    ></a>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <a href="mailto:1105074497@qq.com"
+      ><i class="far fa-envelope-open mr-3" aria-hidden="true"></i
+    ></a>
+    
+
+    
+
+    
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>
+      2019 - 2019 &copy; | Theme
+      <a href="https://github.com/sunbirder/AllinOne-sunbirder" target="_blank"
+        >Sunbirder</a
+      >
+      by <a href="https://github.com/sunbirder" target="_blank">Sunbirder</a>
+    </span>
+  </div>
+  
+  <script>
+    
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?148979661629bc67f5eef748109db778";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cbf852efbb774faa827e6e57b2959c5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://sunbirder.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>

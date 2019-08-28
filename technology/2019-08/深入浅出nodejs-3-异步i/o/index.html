@@ -7,23 +7,23 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="Sunbirder">
-  <meta name="description" content="[Be myself. Love the wonderful world. Do the right things and be a better man.]">
+  <meta name="description" content="深入浅出Nodejs 3 异步I/O">
   
-  <meta property="og:title" content="生活" />
-<meta property="og:description" content="[Be myself. Love the wonderful world. Do the right things and be a better man.]" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://sunbirder.github.io/categories/%E7%94%9F%E6%B4%BB/" />
-
-<meta property="og:updated_time" content="2019-08-17T08:31:37+08:00" />
+  <meta property="og:title" content="深入浅出Nodejs 3 异步I/O" />
+<meta property="og:description" content="深入浅出Nodejs 3 异步I/O" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-3-%E5%BC%82%E6%AD%A5i/o/" />
+<meta property="article:published_time" content="2019-08-17T08:31:37+08:00" />
+<meta property="article:modified_time" content="2019-08-17T08:31:37+08:00" />
 
 
   <title>
   
-       生活 | Sunbirder 
+       深入浅出Nodejs 3 异步I/O | Sunbirder 
   
   </title>
 
-  <link rel="canonical" href="https://sunbirder.github.io/categories/%E7%94%9F%E6%B4%BB/">
+  <link rel="canonical" href="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-3-%E5%BC%82%E6%AD%A5i/o/">
 
   
   
@@ -293,133 +293,355 @@
     
 
     
-<main class="post-main-wrapper px-5">
   
-  <div class="row">
+  <main class="post-main-wrapper">
     
-    <div class="col-md-3">
+    
+    <div class="row">
+
       
+
       
+      <div class="col-md-10">
       
 
-  
-
-
-
-
-
-  <hr>
-  
-    <div class="post-meta">
-      <div class="mb-2">
-        <a href="https://sunbirder.github.io/categories/">
-          <span class="font-weight-bold text-uppercase post-meta">
-            <i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 
-            Categories
-          </span>
-        </a>
-      </div>
-
-      <div class="li-x post-meta" style="margin-left: -8px;">
         
-          
-          
-            
-            <li class="py-1">
-              <a href="https://sunbirder.github.io/categories/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs">
-                <span>深入浅出nodejs (6)</span>
-              </a>
-            </li>           
-          
-            
-              <li class="middot"></li>
-            
-            <li class="py-1">
-              <a href="https://sunbirder.github.io/categories/%E7%94%9F%E6%B4%BB">
-                <span>生活 (1)</span>
-              </a>
-            </li>           
-          
-        
-      </div>
-    </div>
+        <div class="z-depth-1  post-wrapper white-bg single-post">
 
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
     
-  
-
-
       
+        <li><a href="https://sunbirder.github.io/categories/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 深入浅出Nodejs </a></li>
       
+    
+    
+  </ul>
 
-  
+  <div class="px-4 post-heading">深入浅出Nodejs 3 异步I/O</div>
 
-
-
-
-
-
-      
-  
-
-
-
-
-
-
-
-  
-
-    </div>
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Aug 17, 2019</li>
     
 
     
+      <li class="middot"></li>
+      <li>2 minutes read</li>
     
-    <div class="col-md-9 mt-3">
-      <ul>
-        <div class="div-x">
-            <div class='post-heading'>
+  </ul>
   
-      生活
-  
+
 </div>
 
+
+          <div class="post-content markdown">
             
+
+<h1 id="1-异步i-o">1. 异步I/O</h1>
+
+<p>同步时间消耗: M+N</p>
+
+<p>异步时间消耗: MAX(M, N)</p>
+
+<p>耗时比较: CPU&lt;内存&lt;硬盘&lt;网络</p>
+
+<p>I/O: 磁盘文件, 硬件/内存, 套接字/网络</p>
+
+<p>所以: node的异步, 可以高效的优化I/O方面的应用; CPU的耗时是最小的, 如果遇到高CPU计算的应用, 直接通过node实现是不擅长的, 可以考虑CPU率方向解决问题.</p>
+
+<p>单线程同步编程模型: 堵塞I/O问题</p>
+
+<p>多线程编程模型: 死锁, 状态同步, 上下文切换问题</p>
+
+<p>阻塞I/O与非阻塞I/O区别</p>
+
+<p>阻塞I/O: 完成了数据的获取过程, 这个过程, 用户进程只能等待结果返回.</p>
+
+<p>非阻塞I/O: 不带数据返回, 获取数据需要文件句柄/文件描述符轮询读取.</p>
+
+<p>node的的单线程, 仅仅只是js代码执行在单线程中, I/O任务是线程池处理的.</p>
+
+<h1 id="2-node的异步i-o">2. node的异步I/O</h1>
+
+<p><img src="https://sunbirder.github.io/images/technology/深入浅出Nodejs/异步IO图3-13.png" alt="nodejs.png" /></p>
+
+<p>在node中, 除了js是单线程外, node自身时期是多线程的, 只是I/O线程使用的CPU较少.</p>
+
+<h1 id="3-node-非i-o的异步api">3. node, 非I/O的异步API</h1>
+
+<p>setTimeout(), setInterval(), setImmediate(), process.nextTick()</p>
+
+<p>setTimeout(), setInterval() 区别是setInterval是多次执行
+<img src="https://sunbirder.github.io/images/technology/深入浅出Nodejs/异步IO图3-14.png" alt="nodejs.png" /></p>
+
+<p>setImmediate(), process.nextTick() 区别是优先级</p>
+
+<p>setImmediate()  属于idle观察者</p>
+
+<p>process.nextTick()  属于check观察者</p>
+
+<p>优先级:</p>
+
+<p>idle观察者&gt;I/O观察者&gt;check观察者</p>
+
+<h1 id="4-事件驱动与高性能服务器">4. 事件驱动与高性能服务器</h1>
+
+<h3 id="服务器模型">服务器模型</h3>
+
+<p>同步式:    一次只处理一个请求</p>
+
+<p>每进程/每请求:    一个请求启动一个进程, php采用(不确定).</p>
+
+<p>每线程/每请求:    一个请求启动一个线程, apache采用.</p>
+
+<h2 id="版本控制">版本控制</h2>
+
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Action</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Init</td>
+<td>2019-08-20</td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
             
-              <div class="px-2 middot"></div>
-              <div>
-                One post
-              </div>
+            </div>
             
           </div>
-      
           
-      </ul>
-      <ul>
-        
-            
-        
-        
-            
-                <li class="post-item no-bullet">
-                    <span class="date">2019.8</span>
-                </li>
-                
-                    <li class="post-item">
-    
-    <span class="meta"><time datetime='2019-08-17T08:31:37&#43;08:00'>Aug 17, 2019</time></span>
-    
-    <a href="https://sunbirder.github.io/blog/2019-08/%E7%AC%AC%E4%B8%80%E7%AF%87log/"><span>第一篇log</span></a>
-</li>
 
-                
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-4-%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>深入浅出Nodejs 4 异步编程</span>
+                  </div>
+                </a>
+              
+            </div>
             
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-2-%E6%A8%A1%E5%9D%97%E6%9C%BA%E5%88%B6/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>深入浅出Nodejs 2 模块机制</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
         
-      </ul>
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#1-%e5%bc%82%e6%ad%a5i-o">
+												 1. 异步I/O
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#2-node%e7%9a%84%e5%bc%82%e6%ad%a5i-o">
+												 2. node的异步I/O
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#3-node-%e9%9d%9ei-o%e7%9a%84%e5%bc%82%e6%ad%a5api">
+												 3. node, 非I/O的异步API
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#4-%e4%ba%8b%e4%bb%b6%e9%a9%b1%e5%8a%a8%e4%b8%8e%e9%ab%98%e6%80%a7%e8%83%bd%e6%9c%8d%e5%8a%a1%e5%99%a8">
+												 4. 事件驱动与高性能服务器
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9c%8d%e5%8a%a1%e5%99%a8%e6%a8%a1%e5%9e%8b">
+												 服务器模型
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%89%88%e6%9c%ac%e6%8e%a7%e5%88%b6">
+												 版本控制
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
     </div>
     
-    
-  </div>
-</main> 
+
+
+  </main>
+  
+
 
     
     

@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="Sunbirder">
+  <meta name="description" content="深入浅出Nodejs 模块机制">
+  
+  <meta property="og:title" content="深入浅出Nodejs 2 模块机制" />
+<meta property="og:description" content="深入浅出Nodejs 模块机制" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-2-%E6%A8%A1%E5%9D%97%E6%9C%BA%E5%88%B6/" />
+<meta property="article:published_time" content="2019-08-17T08:31:37+08:00" />
+<meta property="article:modified_time" content="2019-08-17T08:31:37+08:00" />
+
+
+  <title>
+  
+       深入浅出Nodejs 2 模块机制 | Sunbirder 
+  
+  </title>
+
+  <link rel="canonical" href="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-2-%E6%A8%A1%E5%9D%97%E6%9C%BA%E5%88%B6/">
+
+  
+  
+
+  
+  <link href="https://sunbirder.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://sunbirder.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://sunbirder.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://sunbirder.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://sunbirder.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://sunbirder.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://sunbirder.github.io/img/WechatIMG381.jpeg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://sunbirder.github.io/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://sunbirder.github.io/">
+          
+        <img class="avatar" src="https://sunbirder.github.io/img/WechatIMG381.jpeg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> Sunbirder</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://sunbirder.github.io/">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://sunbirder.github.io/technology/" >Technology  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://sunbirder.github.io/blog/" >Blog  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://sunbirder.github.io/about/" >About  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides/fan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides//leaf.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides//raw_1515691746.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides//raw_1515847341.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://sunbirder.github.io/">
+          
+            <img class="pull-right avatar avatar-md" src="https://sunbirder.github.io/img/WechatIMG381.jpeg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://sunbirder.github.io/">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>Sunbirder</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/sunbirder" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+              <a href="//linkedin.com/in/birder-sun-449887191/" target="_blank" rel="noopener"><i class="fab fa-linkedin pr-1" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:1105074497@qq.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://sunbirder.github.io/categories/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 深入浅出Nodejs </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">深入浅出Nodejs 2 模块机制</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Aug 17, 2019</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>2 minutes read</li>
+    
+  </ul>
+  
+
+</div>
+
+
+          <div class="post-content markdown">
+            
+
+<h1 id="1-commonjs规范">1. CommonJS规范</h1>
+
+<p><img src="https://sunbirder.github.io/images/technology/深入浅出Nodejs/模块机制图2-2.png" alt="nodejs.png" />
+<img src="https://sunbirder.github.io/images/technology/深入浅出Nodejs/模块机制图2-3.png" alt="nodejs.png" /></p>
+
+<h1 id="2-node-模块实现">2. Node 模块实现</h1>
+
+<p>核心模块:</p>
+
+<p>node源码中编译生成, 路径分析中优先判断</p>
+
+<p>文件模块:</p>
+
+<p>运行时动态加载, 需要经历路径分析, 文件定位, 编译执行过程; 速度比核心模块慢</p>
+
+<h3 id="路径分析">路径分析</h3>
+
+<h4 id="1-核心模块">1. 核心模块</h4>
+
+<h4 id="2-路径形式文件模块">2. 路径形式文件模块</h4>
+
+<p>以. .. / 开始的标识符, 被当做文件模块加载</p>
+
+<h4 id="3-自定义模块">3. 自定义模块</h4>
+
+<p>node_modules加载方式, 是所有加载方式中最慢的</p>
+
+<h3 id="文件定位">文件定位</h3>
+
+<h4 id="文件扩展名分析">文件扩展名分析</h4>
+
+<p>require 引入模块不包含扩展名, nodejs依次尝试 .js .json .node扩展名</p>
+
+<h4 id="目录分析和包">目录分析和包</h4>
+
+<p>如果require分析, 没有获取到对应的文件, 但是得到一个目录; node会尝试获取该目录下的package.json读取main属性, 如果获取失败, 则尝试index.js index.json index.node; 如果还是失败, 则会遍历该目录查找目标文件.</p>
+
+<h3 id="编译执行过程">编译执行过程</h3>
+
+<p>.js 通过fs模块读取后编译执行</p>
+
+<p>.node 通过dlopen方法加载后编译执行</p>
+
+<p>.json 通过JSON.parse()解析后返回结果</p>
+
+<p>其余扩展名 被当做.js文件加载</p>
+
+<h4 id="1-js模块编译">1. .js模块编译</h4>
+
+<h4 id="2-node编译-c-c-模块编译">2. .node编译, C/C++模块编译</h4>
+
+<h4 id="3-json文件编译">3. .json文件编译</h4>
+
+<h1 id="3-核心模块">3. 核心模块</h1>
+
+<p>包括C/C++和js编写组成, C/C++在node项目src目录下, js在node项目lib目录下</p>
+
+<h4 id="1-js核心模块加载过程">1. js核心模块加载过程</h4>
+
+<p>转存为C/C++代码</p>
+
+<p>编译js代码</p>
+
+<h4 id="2-c-c-核心模块加载过程">2. C/C++核心模块加载过程</h4>
+
+<p><img src="https://sunbirder.github.io/images/technology/深入浅出Nodejs/模块机制图2-4.png" alt="nodejs.png" /></p>
+
+<p><img src="https://sunbirder.github.io/images/technology/深入浅出Nodejs/模块机制图2-5.png" alt="nodejs.png" /></p>
+
+<h1 id="4-c-c-扩展模块">4. C/C++扩展模块</h1>
+
+<p>GYP项目生成工具   node-gyp 支持编写跨平台node的C/C++代码</p>
+
+<p>V8引擎C++库    实现js和C++相互调用</p>
+
+<p>libuv库  跨平台库, 实现了时间循环, 文件操作等</p>
+
+<p>Node内部库</p>
+
+<p>其他库 在deps目录下</p>
+
+<p>####1. C/C++扩展模块的编写</p>
+
+<p>####2. C/C++扩展模块的编译</p>
+
+<p>####3. C/C++扩展模块的加载</p>
+
+<h1 id="5-模块调用栈">5. 模块调用栈</h1>
+
+<p><img src="https://sunbirder.github.io/images/technology/深入浅出Nodejs/模块机制图2-8.png" alt="nodejs.png" /></p>
+
+<h1 id="6-包与npm">6. 包与NPM</h1>
+
+<p>包结构:
+package.json    包描述文件
+bin     可执行二进制文件
+lib     js代码
+doc     文档
+test    单元测试</p>
+
+<h1 id="7-前后端公用模块">7. 前后端公用模块</h1>
+
+<p>node是CommonJS实现规范的一种; AMD规范是CommonJS在前端的领域的延伸</p>
+
+<h4 id="amd规范">AMD规范:</h4>
+
+<p>define([id, dependencies], factory/function)
+id  模块id, 选填
+dependencies    依赖, 选填
+factory 必填, 模块实现部分</p>
+
+<h4 id="cmd规范">CMD规范</h4>
+
+<p>define([&lsquo;dependencies1&rsquo;, &hellip;], function(dependencies1, &hellip;){
+    return function(){};
+})</p>
+
+<p>CMD与AMD的区别, 主要是定义模块和依赖引入的部分</p>
+
+<h2 id="版本控制">版本控制</h2>
+
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Action</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Init</td>
+<td>2019-08-19</td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-3-%E5%BC%82%E6%AD%A5i/o/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>深入浅出Nodejs 3 异步I/O</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-1-%E7%AE%80%E4%BB%8B/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>深入浅出Nodejs 1 简介</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#1-commonjs%e8%a7%84%e8%8c%83">
+												 1. CommonJS规范
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#2-node-%e6%a8%a1%e5%9d%97%e5%ae%9e%e7%8e%b0">
+												 2. Node 模块实现
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%b7%af%e5%be%84%e5%88%86%e6%9e%90">
+												 路径分析
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#1-%e6%a0%b8%e5%bf%83%e6%a8%a1%e5%9d%97">
+												 1. 核心模块
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#2-%e8%b7%af%e5%be%84%e5%bd%a2%e5%bc%8f%e6%96%87%e4%bb%b6%e6%a8%a1%e5%9d%97">
+												 2. 路径形式文件模块
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#3-%e8%87%aa%e5%ae%9a%e4%b9%89%e6%a8%a1%e5%9d%97">
+												 3. 自定义模块
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%96%87%e4%bb%b6%e5%ae%9a%e4%bd%8d">
+												 文件定位
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%96%87%e4%bb%b6%e6%89%a9%e5%b1%95%e5%90%8d%e5%88%86%e6%9e%90">
+												 文件扩展名分析
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%9b%ae%e5%bd%95%e5%88%86%e6%9e%90%e5%92%8c%e5%8c%85">
+												 目录分析和包
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%bc%96%e8%af%91%e6%89%a7%e8%a1%8c%e8%bf%87%e7%a8%8b">
+												 编译执行过程
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#1-js%e6%a8%a1%e5%9d%97%e7%bc%96%e8%af%91">
+												 1. .js模块编译
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#2-node%e7%bc%96%e8%af%91-c-c-%e6%a8%a1%e5%9d%97%e7%bc%96%e8%af%91">
+												 2. .node编译, C/C&#43;&#43;模块编译
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#3-json%e6%96%87%e4%bb%b6%e7%bc%96%e8%af%91">
+												 3. .json文件编译
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#3-%e6%a0%b8%e5%bf%83%e6%a8%a1%e5%9d%97">
+												 3. 核心模块
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#1-js%e6%a0%b8%e5%bf%83%e6%a8%a1%e5%9d%97%e5%8a%a0%e8%bd%bd%e8%bf%87%e7%a8%8b">
+												 1. js核心模块加载过程
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#2-c-c-%e6%a0%b8%e5%bf%83%e6%a8%a1%e5%9d%97%e5%8a%a0%e8%bd%bd%e8%bf%87%e7%a8%8b">
+												 2. C/C&#43;&#43;核心模块加载过程
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#4-c-c-%e6%89%a9%e5%b1%95%e6%a8%a1%e5%9d%97">
+												 4. C/C&#43;&#43;扩展模块
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#5-%e6%a8%a1%e5%9d%97%e8%b0%83%e7%94%a8%e6%a0%88">
+												 5. 模块调用栈
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#6-%e5%8c%85%e4%b8%8enpm">
+												 6. 包与NPM
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#7-%e5%89%8d%e5%90%8e%e7%ab%af%e5%85%ac%e7%94%a8%e6%a8%a1%e5%9d%97">
+												 7. 前后端公用模块
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#amd%e8%a7%84%e8%8c%83">
+												 AMD规范:
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#cmd%e8%a7%84%e8%8c%83">
+												 CMD规范
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%89%88%e6%9c%ac%e6%8e%a7%e5%88%b6">
+												 版本控制
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+    <a href="//github.com/sunbirder " target="_blank" rel="noopener"
+      ><i class="fab fa-github mr-3" aria-hidden="true"></i
+    ></a>
+    
+    
+    <a href="//linkedin.com/in/birder-sun-449887191/" target="_blank" rel="noopener"
+      ><i class="fab fa-linkedin-in mr-3" aria-hidden="true"></i
+    ></a>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <a href="mailto:1105074497@qq.com"
+      ><i class="far fa-envelope-open mr-3" aria-hidden="true"></i
+    ></a>
+    
+
+    
+
+    
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>
+      2019 - 2019 &copy; | Theme
+      <a href="https://github.com/sunbirder/AllinOne-sunbirder" target="_blank"
+        >Sunbirder</a
+      >
+      by <a href="https://github.com/sunbirder" target="_blank">Sunbirder</a>
+    </span>
+  </div>
+  
+  <script>
+    
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?148979661629bc67f5eef748109db778";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cbf852efbb774faa827e6e57b2959c5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://sunbirder.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
