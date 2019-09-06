@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="Sunbirder">
+  <meta name="description" content="深入理解LIINUX内核 1 绪论">
+  
+  <meta property="og:title" content="深入理解LIINUX内核 1 绪论" />
+<meta property="og:description" content="深入理解LIINUX内核 1 绪论" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3liinux%E5%86%85%E6%A0%B8-1-%E7%BB%AA%E8%AE%BA/" />
+<meta property="article:published_time" content="2019-08-17T08:31:37+08:00" />
+<meta property="article:modified_time" content="2019-08-17T08:31:37+08:00" />
+
+
+  <title>
+  
+       深入理解LIINUX内核 1 绪论 | Sunbirder 
+  
+  </title>
+
+  <link rel="canonical" href="https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3liinux%E5%86%85%E6%A0%B8-1-%E7%BB%AA%E8%AE%BA/">
+
+  
+  
+
+  
+  <link href="https://sunbirder.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://sunbirder.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://sunbirder.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://sunbirder.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://sunbirder.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://sunbirder.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://sunbirder.github.io/img/WechatIMG381.jpeg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://sunbirder.github.io/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://sunbirder.github.io/">
+          
+        <img class="avatar" src="https://sunbirder.github.io/img/WechatIMG381.jpeg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> Sunbirder</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://sunbirder.github.io/">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://sunbirder.github.io/technology/" >Technology  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://sunbirder.github.io/blog/" >Blog  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://sunbirder.github.io/about/" >About  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides/fan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides//leaf.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides//raw_1515691746.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://sunbirder.github.io/img/header-slides//raw_1515847341.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://sunbirder.github.io/">
+          
+            <img class="pull-right avatar avatar-md" src="https://sunbirder.github.io/img/WechatIMG381.jpeg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://sunbirder.github.io/">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>Sunbirder</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/sunbirder" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+              <a href="//linkedin.com/in/birder-sun-449887191/" target="_blank" rel="noopener"><i class="fab fa-linkedin pr-1" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:1105074497@qq.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://sunbirder.github.io/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3liinux%E5%86%85%E6%A0%B8"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 深入理解LIINUX内核 </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">深入理解LIINUX内核 1 绪论</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Aug 17, 2019</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>2 minutes read</li>
+    
+  </ul>
+  
+
+</div>
+
+
+          <div class="post-content markdown">
+            
+
+<h1 id="1-操作系统基本概念">1. 操作系统基本概念</h1>
+
+<p>与硬件部分交互, 为包含在硬件平台的所有底层可编程部件提供服务.</p>
+
+<p>为运行在计算机系统上的应用程序(即用户程序)提供执行环境.</p>
+
+<p>用户态与内核态</p>
+
+<h4 id="进程-程序执行时的一个实例-执行上下文">进程:    程序执行时的一个实例/执行上下文</h4>
+
+<h4 id="内核体系结构">内核体系结构</h4>
+
+<p>大部分Unix内核是单块结构</p>
+
+<h4 id="unix文件系统">Unix文件系统</h4>
+
+<p>硬链接 1. 不允许创建目录硬链接   2. 只能在同一文件系统下创建</p>
+
+<p>软连接 没有硬链接的限制</p>
+
+<h4 id="文件类型">文件类型</h4>
+
+<p>普通文件</p>
+
+<p>目录</p>
+
+<p>符号链接</p>
+
+<p>面向块的设备文件</p>
+
+<p>面向字符的设备文件</p>
+
+<p>管道和命名管道</p>
+
+<p>套接字</p>
+
+<h4 id="文件描述符与索引节点">文件描述符与索引节点</h4>
+
+<p>POSIX标准属性:</p>
+
+<p>文件类型</p>
+
+<p>与文件相关的硬链接个数</p>
+
+<p>以字节为单位的文件长度</p>
+
+<p>设备标识符</p>
+
+<p>在文件系统中标识文件的索引节点号</p>
+
+<p>文件拥有者的UID</p>
+
+<p>文件的用户组ID</p>
+
+<p>几个时间戳, 表示索引节点状态改变的时间, 最后访问时间及最后修改时间</p>
+
+<p>访问权限和文件模式</p>
+
+<h4 id="访问权限和文件模式">访问权限和文件模式</h4>
+
+<p>文件的潜在用户分为三种类型:</p>
+
+<p>作为文件所有者的用户</p>
+
+<p>同组用户, 不包括所有者</p>
+
+<p>所有剩下的用户(其他)</p>
+
+<p>附加标记: suid, sgid, sticky</p>
+
+<h4 id="进程-内核模式">进程/内核模式</h4>
+
+<p>CPU即可以运行在用户态也可以运行在内核态</p>
+
+<p>内核线程(特权进程)</p>
+
+<ol>
+<li>以内核态运行在内核地址空间</li>
+<li>不与用户直接交互</li>
+<li>在系统启动时创建, 直到系统关闭</li>
+</ol>
+
+<h4 id="激活内核例程方式">激活内核例程方式</h4>
+
+<p>进程调用系统调用.</p>
+
+<p>正在执行进程的CPU发出一个异常信号.</p>
+
+<p>外围设备向CPU发送一个中断信号.</p>
+
+<p>内核线程被执行.</p>
+
+<h4 id="进程实现">进程实现</h4>
+
+<p>每个进程由进程描述符标识</p>
+
+<p>暂停进程: 添加几个相关处理器内容保存到进程描述符.</p>
+
+<p>程序计数器(PC)和栈指针(SP)寄存器</p>
+
+<p>通用寄存器</p>
+
+<p>浮点寄存器</p>
+
+<p>包含CPU状态信息的处理器控制寄存器</p>
+
+<p>用来跟踪进程对RAM访问的内存管理寄存器</p>
+
+<h4 id="可重入内核">可重入内核</h4>
+
+<h4 id="内核控制路径的交错执行">内核控制路径的交错执行</h4>
+
+<p>图!!!</p>
+
+<h4 id="进程地址空间">进程地址空间</h4>
+
+<p>用户态: 数据区, 代码区, 私有栈</p>
+
+<p>内核态: 数据区, 代码区, 私有栈</p>
+
+<p>备注: 用户态和内核态的私有栈是独立的.</p>
+
+<p>每个进程访问私有地址, 但是有时候进程间也共享部分地址空间.</p>
+
+<p>一个程序多个用户使用, 程序只被内存装载内存一次, 其指令由所有哦使用它的用户共享, 每个用户独立数据.</p>
+
+<p>进程间也有共享部分地址空间, 用于进程间通信.</p>
+
+<h4 id="同步和临界区">同步和临界区</h4>
+
+<h4 id="非抢占式内核">非抢占式内核</h4>
+
+<h4 id="禁止中断">禁止中断</h4>
+
+<h4 id="信号量">信号量</h4>
+
+<h4 id="自旋锁">自旋锁</h4>
+
+<h4 id="避免死锁">避免死锁</h4>
+
+<h4 id="信号和进程间通信">信号和进程间通信</h4>
+
+<h4 id="进程管理">进程管理</h4>
+
+<h4 id="僵尸进程">僵尸进程</h4>
+
+<h4 id="进程组和登录会话">进程组和登录会话</h4>
+
+<h4 id="内存管理">内存管理</h4>
+
+<h4 id="虚拟内存">虚拟内存</h4>
+
+<h4 id="随机访问存储器-ram-的使用">随机访问存储器(RAM)的使用</h4>
+
+<h4 id="内核内存分配器">内核内存分配器</h4>
+
+<h4 id="进程虚拟地址空间处理">进程虚拟地址空间处理</h4>
+
+<h4 id="高速缓存">高速缓存</h4>
+
+<h4 id="设备驱动程序">设备驱动程序</h4>
+
+<h2 id="版本控制">版本控制</h2>
+
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Action</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Init</td>
+<td>2019-08-25</td>
+</tr>
+</tbody>
+</table>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BAnodejs-7-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>深入浅出Nodejs 7 网络编程</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#1-%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5">
+												 1. 操作系统基本概念
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%bf%9b%e7%a8%8b-%e7%a8%8b%e5%ba%8f%e6%89%a7%e8%a1%8c%e6%97%b6%e7%9a%84%e4%b8%80%e4%b8%aa%e5%ae%9e%e4%be%8b-%e6%89%a7%e8%a1%8c%e4%b8%8a%e4%b8%8b%e6%96%87">
+												 进程: 程序执行时的一个实例/执行上下文
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%86%85%e6%a0%b8%e4%bd%93%e7%b3%bb%e7%bb%93%e6%9e%84">
+												 内核体系结构
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#unix%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f">
+												 Unix文件系统
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%96%87%e4%bb%b6%e7%b1%bb%e5%9e%8b">
+												 文件类型
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%96%87%e4%bb%b6%e6%8f%8f%e8%bf%b0%e7%ac%a6%e4%b8%8e%e7%b4%a2%e5%bc%95%e8%8a%82%e7%82%b9">
+												 文件描述符与索引节点
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%ae%bf%e9%97%ae%e6%9d%83%e9%99%90%e5%92%8c%e6%96%87%e4%bb%b6%e6%a8%a1%e5%bc%8f">
+												 访问权限和文件模式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%bf%9b%e7%a8%8b-%e5%86%85%e6%a0%b8%e6%a8%a1%e5%bc%8f">
+												 进程/内核模式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%bf%80%e6%b4%bb%e5%86%85%e6%a0%b8%e4%be%8b%e7%a8%8b%e6%96%b9%e5%bc%8f">
+												 激活内核例程方式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%bf%9b%e7%a8%8b%e5%ae%9e%e7%8e%b0">
+												 进程实现
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%af%e9%87%8d%e5%85%a5%e5%86%85%e6%a0%b8">
+												 可重入内核
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%86%85%e6%a0%b8%e6%8e%a7%e5%88%b6%e8%b7%af%e5%be%84%e7%9a%84%e4%ba%a4%e9%94%99%e6%89%a7%e8%a1%8c">
+												 内核控制路径的交错执行
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%bf%9b%e7%a8%8b%e5%9c%b0%e5%9d%80%e7%a9%ba%e9%97%b4">
+												 进程地址空间
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%90%8c%e6%ad%a5%e5%92%8c%e4%b8%b4%e7%95%8c%e5%8c%ba">
+												 同步和临界区
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%9d%9e%e6%8a%a2%e5%8d%a0%e5%bc%8f%e5%86%85%e6%a0%b8">
+												 非抢占式内核
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%a6%81%e6%ad%a2%e4%b8%ad%e6%96%ad">
+												 禁止中断
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%bf%a1%e5%8f%b7%e9%87%8f">
+												 信号量
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%87%aa%e6%97%8b%e9%94%81">
+												 自旋锁
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%81%bf%e5%85%8d%e6%ad%bb%e9%94%81">
+												 避免死锁
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%bf%a1%e5%8f%b7%e5%92%8c%e8%bf%9b%e7%a8%8b%e9%97%b4%e9%80%9a%e4%bf%a1">
+												 信号和进程间通信
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%bf%9b%e7%a8%8b%e7%ae%a1%e7%90%86">
+												 进程管理
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%83%b5%e5%b0%b8%e8%bf%9b%e7%a8%8b">
+												 僵尸进程
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%bf%9b%e7%a8%8b%e7%bb%84%e5%92%8c%e7%99%bb%e5%bd%95%e4%bc%9a%e8%af%9d">
+												 进程组和登录会话
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86">
+												 内存管理
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%99%9a%e6%8b%9f%e5%86%85%e5%ad%98">
+												 虚拟内存
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%9a%8f%e6%9c%ba%e8%ae%bf%e9%97%ae%e5%ad%98%e5%82%a8%e5%99%a8-ram-%e7%9a%84%e4%bd%bf%e7%94%a8">
+												 随机访问存储器(RAM)的使用
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%86%85%e6%a0%b8%e5%86%85%e5%ad%98%e5%88%86%e9%85%8d%e5%99%a8">
+												 内核内存分配器
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%bf%9b%e7%a8%8b%e8%99%9a%e6%8b%9f%e5%9c%b0%e5%9d%80%e7%a9%ba%e9%97%b4%e5%a4%84%e7%90%86">
+												 进程虚拟地址空间处理
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%ab%98%e9%80%9f%e7%bc%93%e5%ad%98">
+												 高速缓存
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%ae%be%e5%a4%87%e9%a9%b1%e5%8a%a8%e7%a8%8b%e5%ba%8f">
+												 设备驱动程序
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%89%88%e6%9c%ac%e6%8e%a7%e5%88%b6">
+												 版本控制
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+    <a href="//github.com/sunbirder " target="_blank" rel="noopener"
+      ><i class="fab fa-github mr-3" aria-hidden="true"></i
+    ></a>
+    
+    
+    <a href="//linkedin.com/in/birder-sun-449887191/" target="_blank" rel="noopener"
+      ><i class="fab fa-linkedin-in mr-3" aria-hidden="true"></i
+    ></a>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <a href="mailto:1105074497@qq.com"
+      ><i class="far fa-envelope-open mr-3" aria-hidden="true"></i
+    ></a>
+    
+
+    
+
+    
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>
+      2019 - 2019 &copy; | Theme
+      <a href="https://github.com/sunbirder/AllinOne-sunbirder" target="_blank"
+        >Sunbirder</a
+      >
+      by <a href="https://github.com/sunbirder" target="_blank">Sunbirder</a>
+    </span>
+  </div>
+  
+  <script>
+    
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?148979661629bc67f5eef748109db778";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7cbf852efbb774faa827e6e57b2959c5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://sunbirder.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://sunbirder.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>

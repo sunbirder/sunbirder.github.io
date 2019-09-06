@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>深入理解LIINUX内核 on Sunbirder</title>
+    <link>https://sunbirder.github.io/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3liinux%E5%86%85%E6%A0%B8/</link>
+    <description>Recent content in 深入理解LIINUX内核 on Sunbirder</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Sat, 17 Aug 2019 08:31:37 +0800</lastBuildDate>
+    
+	<atom:link href="https://sunbirder.github.io/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3liinux%E5%86%85%E6%A0%B8/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>深入理解LIINUX内核 1 绪论</title>
+      <link>https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3liinux%E5%86%85%E6%A0%B8-1-%E7%BB%AA%E8%AE%BA/</link>
+      <pubDate>Sat, 17 Aug 2019 08:31:37 +0800</pubDate>
+      
+      <guid>https://sunbirder.github.io/technology/2019-08/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3liinux%E5%86%85%E6%A0%B8-1-%E7%BB%AA%E8%AE%BA/</guid>
+      <description>深入理解LIINUX内核 1 绪论</description>
+    </item>
+    
+  </channel>
+</rss>
